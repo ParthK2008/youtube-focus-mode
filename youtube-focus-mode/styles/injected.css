@@ -1,0 +1,338 @@
+/**
+ * injected.css — every rule is gated behind a class on <html>, toggled from
+ * content.js, or behind the [data-yfm-hide] attribute that content.js sets on
+ * item containers. Selectors favor structure (links, attributes, :has()) over
+ * YouTube's generated class names.
+ *
+ * The block screen (#yfm-block-screen) and toast (#yfm-toast) never carry
+ * [data-yfm-hide], so the hide rule can never hide them.
+ */
+
+/* ---------- Shorts: shelves ---------- */
+html.yfm-hide-shorts ytd-reel-shelf-renderer,
+html.yfm-hide-shorts ytd-rich-shelf-renderer[is-shorts],
+html.yfm-hide-shorts ytd-rich-section-renderer:has(ytd-rich-shelf-renderer[is-shorts]),
+html.yfm-hide-shorts ytd-rich-section-renderer:has(ytd-reel-shelf-renderer),
+html.yfm-hide-shorts grid-shelf-view-model:has(ytm-shorts-lockup-view-model):not(:has(a[href^="/watch"])),
+html.yfm-hide-shorts grid-shelf-view-model:has(ytm-shorts-lockup-view-model-v2):not(:has(a[href^="/watch"])),
+html.yfm-hide-shorts ytd-shelf-renderer:has(a[href^="/shorts/"]):not(:has(a[href^="/watch"])),
+html.yfm-hide-shorts ytd-rich-shelf-renderer:has(ytm-shorts-lockup-view-model):not(:has(a[href^="/watch"])) {
+  display: none !important;
+}
+
+/* ---------- Shorts: single items (any renderer family) ---------- */
+html.yfm-hide-shorts :is(
+  ytd-video-renderer, ytd-grid-video-renderer, ytd-rich-item-renderer,
+  ytd-compact-video-renderer, ytd-playlist-video-renderer,
+  ytd-playlist-panel-video-renderer, yt-lockup-view-model
+):has(a[href^="/shorts/"], a[href*="youtube.com/shorts/"], ytm-shorts-lockup-view-model, ytm-shorts-lockup-view-model-v2,
+      [overlay-style="SHORTS"]),
+html.yfm-hide-shorts ytm-shorts-lockup-view-model,
+html.yfm-hide-shorts ytm-shorts-lockup-view-model-v2,
+html.yfm-hide-shorts ytd-reel-item-renderer {
+  display: none !important;
+}
+
+/* ---------- Shorts: left guide, mini guide, channel tab ---------- */
+html.yfm-hide-shorts ytd-guide-entry-renderer:has(a[href="/shorts"]),
+html.yfm-hide-shorts ytd-guide-entry-renderer:has(a[href="/shorts/"]),
+html.yfm-hide-shorts ytd-guide-entry-renderer:has(a[href^="/shorts?"]),
+html.yfm-hide-shorts ytd-mini-guide-entry-renderer:has(a[href="/shorts/"]),
+html.yfm-hide-shorts ytd-mini-guide-entry-renderer:has(a[href^="/shorts?"]),
+html.yfm-hide-shorts ytd-guide-entry-renderer:has(a[title="Shorts"]),
+html.yfm-hide-shorts ytd-mini-guide-entry-renderer:has(a[href="/shorts"]),
+html.yfm-hide-shorts ytd-mini-guide-entry-renderer[aria-label="Shorts"],
+html.yfm-hide-shorts yt-tab-shape[tab-title="Shorts"],
+html.yfm-hide-shorts yt-tab-shape:has(a[href$="/shorts"]),
+html.yfm-hide-shorts tp-yt-paper-tab:has(a[href$="/shorts"]) {
+  display: none !important;
+}
+
+/* ---------- Up Next / end screen rabbit-holing ---------- */
+html.yfm-hide-up-next ytd-watch-next-secondary-results-renderer,
+html.yfm-hide-up-next ytd-watch-flexy #related,
+html.yfm-hide-up-next ytd-watch-flexy yt-related-chip-cloud-renderer,
+html.yfm-hide-up-next .ytp-endscreen-content,
+html.yfm-hide-up-next .ytp-ce-element {
+  display: none !important;
+}
+
+/* Safety net: recommendation tiles that YouTube renders outside the usual
+   related container (continuations, layout switches). Scoped to #related and
+   #secondary so the playlist panel and live chat are never touched. */
+html.yfm-hide-up-next ytd-watch-flexy :is(#related, #secondary) :is(
+  yt-lockup-view-model, ytd-compact-video-renderer, ytd-compact-playlist-renderer,
+  ytd-compact-radio-renderer, ytd-compact-movie-renderer, ytd-compact-autoplay-renderer
+) {
+  display: none !important;
+}
+
+/* ---------- Comments ---------- */
+html.yfm-hide-comments ytd-comments#comments,
+html.yfm-hide-comments ytd-item-section-renderer[section-identifier="comment-item-section"] {
+  display: none !important;
+}
+
+/* ---------- Explore / Trending ---------- */
+html.yfm-hide-explore ytd-guide-entry-renderer:has(a[title="Explore"]),
+html.yfm-hide-explore ytd-guide-entry-renderer:has(a[title="Trending"]),
+html.yfm-hide-explore ytd-guide-entry-renderer:has(a[href="/feed/explore"]),
+html.yfm-hide-explore ytd-guide-entry-renderer:has(a[href="/feed/trending"]) {
+  display: none !important;
+}
+
+/* ---------- Explore section (header + every entry) ---------- */
+/* content.js sets [data-yfm-explore] on the guide section whose header reads
+   "Explore" (English UI only; there is no href that identifies the section). */
+html.yfm-hide-explore ytd-guide-section-renderer[data-yfm-explore] {
+  display: none !important;
+}
+
+/* ---------- Disable Autoplay: the switch itself is hidden ---------- */
+/* Player control bar (the switch lives inside a .ytp-button), the settings-menu
+   row, and the up-next card's switch. content.js keeps the state forced off, and
+   a programmatic click still works on a display:none element. */
+html.yfm-disable-autoplay .ytp-autonav-toggle-button-container,
+html.yfm-disable-autoplay button.ytp-button:has(.ytp-autonav-toggle-button-container),
+html.yfm-disable-autoplay .ytp-menuitem:has(.ytp-autonav-toggle-button),
+html.yfm-disable-autoplay ytd-compact-autoplay-renderer #toggle,
+html.yfm-disable-autoplay ytd-compact-autoplay-renderer tp-yt-paper-toggle-button {
+  display: none !important;
+}
+
+/* ---------- Item containers hidden by content.js ---------- */
+/* Channel / keyword / hashtag / Shorts / empty-shelf verdicts. Only ever set
+   on item and shelf containers, never on overlays. */
+[data-yfm-hide] {
+  display: none !important;
+}
+
+/* ---------- Home feed placeholder (home page only) ---------- */
+html.yfm-hide-home-feed.yfm-path-home ytd-two-column-browse-results-renderer > *:not(#yfm-home-placeholder) {
+  display: none !important;
+}
+
+/* "Search and Learn" screen. Light theme is the reference; html[dark] is a
+   derived variant with the same layout and accent colours. Inline CSS only. */
+#yfm-home-placeholder {
+  --yfm-navy: #0f1b3d;
+  --yfm-muted: #5b6785;
+  --yfm-blue: #2f6bff;
+  --yfm-violet: #7c4dff;
+  --yfm-green: #18a874;
+  --yfm-field-bg: #ffffff;
+  --yfm-field-shadow: 0 12px 40px rgba(47, 107, 255, 0.18), 0 0 0 1px rgba(47, 107, 255, 0.1);
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  padding: 48px 24px;
+  overflow: hidden;
+  text-align: center;
+  font-family: "Inter", "Roboto", "Segoe UI", Arial, sans-serif;
+  color: var(--yfm-navy);
+  background:
+    radial-gradient(60% 50% at 0% 0%, rgba(47, 107, 255, 0.14), transparent 70%),
+    radial-gradient(55% 50% at 100% 100%, rgba(124, 77, 255, 0.14), transparent 70%),
+    #f7f9ff;
+}
+
+html[dark] #yfm-home-placeholder {
+  --yfm-navy: #eef1ff;
+  --yfm-muted: #a3adc9;
+  --yfm-field-bg: #1b2030;
+  --yfm-field-shadow: 0 12px 40px rgba(47, 107, 255, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(60% 50% at 0% 0%, rgba(47, 107, 255, 0.22), transparent 70%),
+    radial-gradient(55% 50% at 100% 100%, rgba(124, 77, 255, 0.22), transparent 70%),
+    #0f1117;
+}
+
+#yfm-home-placeholder h1 {
+  margin: 0;
+  font-size: clamp(34px, 6vw, 64px);
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--yfm-navy);
+}
+
+#yfm-home-placeholder .yfm-ph-and {
+  background: linear-gradient(90deg, var(--yfm-blue), var(--yfm-violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+#yfm-home-placeholder .yfm-ph-field {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(640px, 100%);
+  height: 60px;
+  padding: 0 8px 0 22px;
+  border-radius: 999px;
+  background: var(--yfm-field-bg);
+  box-shadow: var(--yfm-field-shadow);
+}
+
+#yfm-home-placeholder .yfm-ph-field:focus-within {
+  box-shadow: var(--yfm-field-shadow), 0 0 0 3px rgba(47, 107, 255, 0.35);
+}
+
+#yfm-home-placeholder .yfm-ph-field > svg {
+  flex: none;
+  color: var(--yfm-muted);
+}
+
+#yfm-home-placeholder .yfm-ph-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: 400 17px "Inter", "Roboto", "Segoe UI", Arial, sans-serif;
+  color: var(--yfm-navy);
+}
+
+#yfm-home-placeholder .yfm-ph-input::placeholder {
+  color: var(--yfm-muted);
+  opacity: 0.8;
+}
+
+#yfm-home-placeholder .yfm-ph-go {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--yfm-blue);
+  color: #fff;
+  cursor: pointer;
+}
+
+#yfm-home-placeholder .yfm-ph-go:hover {
+  background: #2257e0;
+}
+
+#yfm-home-placeholder .yfm-ph-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 28px;
+}
+
+#yfm-home-placeholder .yfm-ph-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 4px;
+  border: none;
+  border-radius: 12px;
+  background: none;
+  cursor: pointer;
+  font: 500 13px "Inter", "Roboto", "Segoe UI", Arial, sans-serif;
+  color: var(--yfm-muted);
+}
+
+#yfm-home-placeholder .yfm-ph-dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
+
+#yfm-home-placeholder .yfm-ph-dot[data-tint="blue"] { background: rgba(47, 107, 255, 0.14); color: var(--yfm-blue); }
+#yfm-home-placeholder .yfm-ph-dot[data-tint="violet"] { background: rgba(124, 77, 255, 0.14); color: var(--yfm-violet); }
+#yfm-home-placeholder .yfm-ph-dot[data-tint="green"] { background: rgba(24, 168, 116, 0.14); color: var(--yfm-green); }
+
+#yfm-home-placeholder .yfm-ph-chip:hover .yfm-ph-dot {
+  filter: brightness(0.96);
+}
+
+@media (max-width: 480px) {
+  #yfm-home-placeholder { gap: 28px; padding: 32px 16px; }
+  #yfm-home-placeholder .yfm-ph-input { font-size: 15px; }
+  #yfm-home-placeholder .yfm-ph-shortcuts { gap: 16px; }
+}
+
+#yfm-home-placeholder button:focus-visible {
+  outline: 3px solid rgba(47, 107, 255, 0.6);
+  outline-offset: 2px;
+}
+
+/* ---------- Block screen (channel / hashtag / video) ---------- */
+#yfm-block-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  background: #0f0f0f;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  font-family: "Roboto", Arial, sans-serif;
+  text-align: center;
+  padding: 24px;
+}
+
+#yfm-block-screen h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+#yfm-block-screen p {
+  margin: 0;
+  opacity: 0.75;
+  max-width: 400px;
+}
+
+#yfm-block-screen button {
+  margin-top: 8px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  background: #2f8f7f;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+#yfm-block-screen button:hover {
+  background: #257467;
+}
+
+/* ---------- Toast ("Short blocked") ---------- */
+#yfm-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  z-index: 2147483646;
+  padding: 10px 18px;
+  border-radius: 8px;
+  background: rgba(15, 15, 15, 0.92);
+  color: #fff;
+  font: 500 14px "Roboto", Arial, sans-serif;
+  pointer-events: none;
+}

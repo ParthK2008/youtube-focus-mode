@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>YouTube Focus Mode</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="yfm-app">
+    <header class="yfm-header">
+      <div class="yfm-header-title">
+        <span class="yfm-logo">🎯</span>
+        <div>
+          <h1>Focus Mode</h1>
+          <p id="yfm-session-status" class="yfm-subtitle">for YouTube</p>
+        </div>
+      </div>
+    </header>
+
+    <div id="yfm-onboarding" class="yfm-banner" hidden>
+      Shorts blocking is on by default. Flip any switch below any time — nothing
+      here is permanent, and everything stays on this device.
+    </div>
+
+    <div id="yfm-session-ended-banner" class="yfm-banner yfm-banner-success" hidden>
+      Your focus session finished — settings are back to normal.
+    </div>
+
+    <div id="yfm-not-youtube-banner" class="yfm-banner" hidden>
+      You're not on a YouTube tab right now — settings will apply the next
+      time you open one.
+    </div>
+
+    <nav class="yfm-tabs" role="tablist">
+      <button class="yfm-tab active" data-tab="toggles" type="button">Toggles</button>
+      <button class="yfm-tab" data-tab="lists" type="button">Lists</button>
+      <button class="yfm-tab" data-tab="session" type="button">Session</button>
+      <button class="yfm-tab" data-tab="stats" type="button">Stats</button>
+      <button class="yfm-tab" data-tab="about" type="button">About</button>
+    </nav>
+
+    <main>
+      <!-- TOGGLES -->
+      <section class="yfm-panel active" data-panel="toggles">
+        <div class="yfm-toggle-row" data-toggle="searchOnlyMode">
+          <div>
+            <div class="yfm-toggle-label">Search-Only Mode</div>
+            <div class="yfm-toggle-desc">Forces Block Shorts and Hide Home Feed on while it is active</div>
+          </div>
+          <label class="yfm-switch">
+            <input type="checkbox" data-toggle-input="searchOnlyMode" />
+            <span class="yfm-slider"></span>
+          </label>
+        </div>
+
+        <hr class="yfm-divider" />
+
+        <div class="yfm-toggle-row" data-toggle="blockShorts">
+          <div>
+            <div class="yfm-toggle-label">Block Shorts</div>
+            <div class="yfm-toggle-desc">Hide Shorts everywhere and stop clicks on /shorts/ links</div>
+          </div>
+          <label class="yfm-switch">
+            <input type="checkbox" data-toggle-input="blockShorts" />
+            <span class="yfm-slider"></span>
+          </label>
+        </div>
+
+        <div class="yfm-toggle-row" data-toggle="hideHomeFeed">
+          <div>
+            <div class="yfm-toggle-label">Hide Home Feed</div>
+            <div class="yfm-toggle-desc">Replace recommendations with a calm placeholder</div>
+          </div>
+          <label class="yfm-switch">
+            <input type="checkbox" data-toggle-input="hideHomeFeed" />
+            <span class="yfm-slider"></span>
+          </label>
+        </div>
+
+        <div class="yfm-toggle-row" data-toggle="hideUpNext">
+          <div>
+            <div class="yfm-toggle-label">Hide Up Next</div>
+            <div class="yfm-toggle-desc">No end-screen or sidebar rabbit-holing</div>
+          </div>
+          <label class="yfm-switch">
+            <input type="checkbox" data-toggle-input="hideUpNext" />
+            <span class="yfm-slider"></span>
+          </label>
+        </div>
+
+        <div class="yfm-toggle-row" data-toggle="hideComments">
+          <div>
+            <div class="yfm-toggle-label">Hide Comments</div>
+            <div class="yfm-toggle-desc">Remove the comments section on video pages</div>
+          </div>
+          <label class="yfm-switch">
+            <input type="checkbox" data-toggle-input="hideComments" />
+            <span class="yfm-slider"></span>
+          </label>
+        </div>
+
+        <div class="yfm-toggle-row" data-toggle="disableAutoplay">
+          <div>
+            <div class="yfm-toggle-label">Disable Autoplay</div>
+            <div class="yfm-toggle-desc">Force the autoplay toggle off on every video</div>
+          </div>
+          <label class="yfm-switch">
+            <input type="checkbox" data-toggle-input="disableAutoplay" />
+            <span class="yfm-slider"></span>
+          </label>
+        </div>
+
+        <div class="yfm-toggle-row" data-toggle="hideExplore">
+          <div>
+            <div class="yfm-toggle-label">Hide Explore/Trending</div>
+            <div class="yfm-toggle-desc">Remove Explore &amp; Trending from the sidebar</div>
+          </div>
+          <label class="yfm-switch">
+            <input type="checkbox" data-toggle-input="hideExplore" />
+            <span class="yfm-slider"></span>
+          </label>
+        </div>
+
+        <div class="yfm-toggle-row" data-toggle="blockChannels">
+          <div>
+            <div class="yfm-toggle-label">Block Listed Channels</div>
+            <div class="yfm-toggle-desc">Hide videos, channel cards and pages of channels you've listed</div>
+          </div>
+          <label class="yfm-switch">
+            <input type="checkbox" data-toggle-input="blockChannels" />
+            <span class="yfm-slider"></span>
+          </label>
+        </div>
+
+        <div class="yfm-toggle-row" data-toggle="blockKeywords">
+          <div>
+            <div class="yfm-toggle-label">Block Title Keywords</div>
+            <div class="yfm-toggle-desc">Hide videos whose title contains one of your keywords</div>
+          </div>
+          <label class="yfm-switch">
+            <input type="checkbox" data-toggle-input="blockKeywords" />
+            <span class="yfm-slider"></span>
+          </label>
+        </div>
+
+        <div class="yfm-toggle-row" data-toggle="blockHashtags">
+          <div>
+            <div class="yfm-toggle-label">Block Hashtags</div>
+            <div class="yfm-toggle-desc">Hide videos and Shorts that carry a hashtag you've listed</div>
+          </div>
+          <label class="yfm-switch">
+            <input type="checkbox" data-toggle-input="blockHashtags" />
+            <span class="yfm-slider"></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- LISTS -->
+      <section class="yfm-panel" data-panel="lists">
+        <p id="yfm-list-status" class="yfm-list-status" role="alert" hidden></p>
+
+        <div class="yfm-list-block">
+          <h3>Blocked Channels</h3>
+          <div class="yfm-add-row">
+            <input type="text" id="yfm-channel-input" placeholder="Name, @handle, channel ID or URL" />
+            <button type="button" id="yfm-channel-add">Add</button>
+          </div>
+          <p class="yfm-toggle-desc">
+            Paste a channel name, an @handle, a channel ID (UC…) or a channel
+            URL. Matching ignores case, accents, spaces and a leading @, and
+            the whole name must match. A channel ID or a name that differs
+            from its handle is linked automatically once you open that
+            channel's page or one of its videos.
+          </p>
+          <ul id="yfm-channel-list" class="yfm-chip-list"></ul>
+        </div>
+
+        <hr class="yfm-divider" />
+
+        <div class="yfm-list-block">
+          <h3>Blocked Keywords &amp; Hashtags</h3>
+          <div class="yfm-add-row yfm-add-row-typed">
+            <select id="yfm-keyword-type" aria-label="Entry type">
+              <option value="keyword">Keyword</option>
+              <option value="hashtag">Hashtag</option>
+            </select>
+            <input type="text" id="yfm-keyword-input" placeholder="Word in title, or #hashtag" />
+            <button type="button" id="yfm-keyword-add">Add</button>
+          </div>
+          <p class="yfm-toggle-desc">
+            Keywords match anywhere inside a video title, ignoring case,
+            accents and extra spaces. Anything starting with # is added as a
+            hashtag.
+          </p>
+          <h4 class="yfm-subhead">Keywords</h4>
+          <ul id="yfm-keyword-list" class="yfm-chip-list"></ul>
+          <h4 class="yfm-subhead">Hashtags</h4>
+          <ul id="yfm-hashtag-list" class="yfm-chip-list"></ul>
+          <p class="yfm-toggle-desc">
+            Hashtags in titles, Shorts captions, search snippets and visible
+            hashtag links are blocked everywhere. Hashtags that appear only
+            in a video's description are caught when the video is opened,
+            then remembered and hidden from all lists afterward.
+          </p>
+          <p class="yfm-toggle-desc">
+            A hashtag matches the whole tag: #gaming does not match
+            #gamingsetup or the plain word "gaming".
+          </p>
+        </div>
+      </section>
+
+      <!-- SESSION -->
+      <section class="yfm-panel" data-panel="session">
+        <div id="yfm-session-idle">
+          <div class="yfm-field-row">
+            <label for="yfm-duration-input">Duration (minutes)</label>
+            <input type="number" id="yfm-duration-input" min="1" max="1440" value="25" />
+          </div>
+          <button type="button" id="yfm-start-session" class="yfm-primary-btn">
+            Start Focus Session
+          </button>
+          <p class="yfm-toggle-desc">
+            Turns on every blocking feature — Shorts, home feed, Up Next,
+            comments, autoplay, Explore/Trending, and channel, keyword &amp;
+            hashtag blocking — for the duration you set, then puts every
+            switch back the way it was.
+          </p>
+        </div>
+
+        <div id="yfm-session-active" hidden>
+          <div class="yfm-countdown">
+            <span id="yfm-countdown-time">00:00</span>
+            <span class="yfm-toggle-desc">remaining</span>
+          </div>
+          <button type="button" id="yfm-stop-session" class="yfm-secondary-btn">
+            End Session Early
+          </button>
+        </div>
+      </section>
+
+      <!-- STATS -->
+      <section class="yfm-panel" data-panel="stats">
+        <p class="yfm-toggle-desc">This week, counted locally on this device:</p>
+        <div class="yfm-stats-list">
+          <div class="yfm-stat-card">
+            <span class="yfm-stat-value" id="yfm-stat-shorts">0</span>
+            <div class="yfm-stat-text">
+              <span class="yfm-stat-label">Shorts blocked</span>
+              <span class="yfm-stat-def">Times you clicked or opened a Short, it was blocked, and you stayed on your page. Hiding Shorts from feeds is not counted.</span>
+            </div>
+          </div>
+          <div class="yfm-stat-card">
+            <span class="yfm-stat-value" id="yfm-stat-recs">0</span>
+            <div class="yfm-stat-text">
+              <span class="yfm-stat-label">Recommendations hidden</span>
+              <span class="yfm-stat-def">Home-page views and watch-page views where recommendations were hidden. One per view.</span>
+            </div>
+          </div>
+          <div class="yfm-stat-card">
+            <span class="yfm-stat-value" id="yfm-stat-channels">0</span>
+            <div class="yfm-stat-text">
+              <span class="yfm-stat-label">Channel matches</span>
+              <span class="yfm-stat-def">Unique videos hidden because of a blocked channel. Each video once per week.</span>
+            </div>
+          </div>
+          <div class="yfm-stat-card">
+            <span class="yfm-stat-value" id="yfm-stat-keywords">0</span>
+            <div class="yfm-stat-text">
+              <span class="yfm-stat-label">Keyword matches</span>
+              <span class="yfm-stat-def">Unique videos hidden because of a blocked keyword. Each video once per week.</span>
+            </div>
+          </div>
+          <div class="yfm-stat-card">
+            <span class="yfm-stat-value" id="yfm-stat-hashtags">0</span>
+            <div class="yfm-stat-text">
+              <span class="yfm-stat-label">Hashtag matches</span>
+              <span class="yfm-stat-def">Unique videos hidden or blocked because of a blocked hashtag. Each video once per week.</span>
+            </div>
+          </div>
+        </div>
+        <p class="yfm-toggle-desc">
+          Not counted as "Shorts blocked": opening a Shorts link with no
+          previous YouTube page (typed, pasted or from another site), and
+          switching Block Shorts on while you are already on a Short. Both
+          still redirect you away.
+        </p>
+
+        <hr class="yfm-divider" />
+
+        <h3>Backup</h3>
+        <div class="yfm-button-row">
+          <button type="button" id="yfm-export-btn" class="yfm-secondary-btn">Export Settings</button>
+          <label class="yfm-secondary-btn yfm-file-btn">
+            Import Settings
+            <input type="file" id="yfm-import-input" accept="application/json" hidden />
+          </label>
+        </div>
+        <p id="yfm-import-status" class="yfm-toggle-desc"></p>
+      </section>
+
+      <!-- ABOUT -->
+      <section class="yfm-panel" data-panel="about">
+        <p>
+          YouTube Focus Mode helps you use YouTube intentionally by putting
+          its most distracting design patterns behind switches you control.
+          Every block is optional, reversible, and local — nothing is sent
+          anywhere.
+        </p>
+        <p class="yfm-toggle-desc">
+          To catch Shorts and posts that show no channel or hashtag in the
+          feed, the extension may look up public metadata for those items on
+          youtube.com itself. Nothing is sent anywhere else.
+        </p>
+        <p class="yfm-toggle-desc">Author: Saurabh Maurya</p>
+        <p class="yfm-toggle-desc">Version <span id="yfm-version"></span></p>
+      </section>
+    </main>
+  </div>
+
+  <script src="detect.js"></script>
+  <script src="storage.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
